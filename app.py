@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import tensorflow as tf
+from tensorflow.keras.models import load_model
 
 
 # Load the trained mdel and any necessary preprocessing steps
@@ -9,6 +11,7 @@ model = joblib.load('logistic_model.pkl')
 scaler = joblib.load('scaler.pkl')
 le = joblib.load('label_encoder.pkl')
 feat_names = joblib.load('columns.pkl')
+model_ann = load_model('titanic.keras')
 
 # Set up the Streamlit app interface
 
@@ -51,7 +54,7 @@ if st.button("Predict Survival"):
     input_data_scaled = scaler.transform(input_data)
 
     # Make a prediction using the trained model
-    prediction = model.predict(input_data_scaled)
+    prediction = model_ann.predict(input_data_scaled)
 
     # Display the prediction result
     if prediction[0] == 1:
