@@ -7,14 +7,13 @@ from tensorflow.keras.models import load_model
 
 
 # Load the trained mdel and any necessary preprocessing steps
-model = joblib.load('logistic_model.pkl')
+# model = joblib.load('logistic_model.pkl')
 scaler = joblib.load('scaler.pkl')
 le = joblib.load('label_encoder.pkl')
 feat_names = joblib.load('columns.pkl')
 model_ann = load_model('titanic.keras')
 
 # Set up the Streamlit app interface
-
 
 st.title("Titanic Survival Prediction App")
 st.header("Welcome to the Titanic Survival Prediction App!")
@@ -54,13 +53,14 @@ if st.button("Predict Survival"):
     input_data_scaled = scaler.transform(input_data)
 
     # Make a prediction using the trained model
-    prediction = model_ann.predict(input_data_scaled)
+    prediction_ann = model_ann.predict(input_data_scaled)
 
     # Display the prediction result
-    if prediction[0] == 1:
-        st.success("The model predicts that the passenger survived.")
+    st.write(f"Prediction probability: {prediction_ann[0][0]}")
+    if prediction_ann[0][0] > 0.5:
+        st.success('The passenger is predicted to survive.')
     else:
-        st.error("The model predicts that the passenger did not survive.")
+        st.error('The passenger is predicted not to survive.')
 
 
 
